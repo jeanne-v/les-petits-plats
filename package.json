@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "postcss styles.css -o dist/styles.css",
-    "watch": "postcss styles.css -o dist/styles.css --watch"
+    "build": "postcss input.css -o output.css",
+    "watch": "postcss input.css -o output.css --watch"
   },
   "keywords": [],
   "author": "",

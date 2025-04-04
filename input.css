@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+  --color-yellow: #ffd15b;
+  --color-black: #1b1b1b;
+  --color-grey: #7a7a7a;
+  --color-light-grey: #ededed;
+  --color-white: #ffffff;
+
+  --font-anton: "Anton", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+}
+
+@layer components {
+  .dropdown-btn {
+    background-color: var(--color-white);
+    padding: calc(4 * var(--spacing));
+    display: flex;
+    align-items: center;
+    gap: 63px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+}
