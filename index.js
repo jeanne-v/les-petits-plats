@@ -22,7 +22,7 @@ function displayRecipes(recipesData) {
             <div class="relative">
                 <img class="aspect-[380/253] object-cover" src="assets/${recipe.image}" alt=""/>
                 <p class="text-xs bg-yellow py-1 px-4 w-fit absolute top-5 right-5 rounded-2xl">
-                    10min
+                    ${recipe.time}min
                 </p>
             </div>
             <div class="px-6 pt-8 pb-15">
