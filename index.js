@@ -9,7 +9,7 @@ function displayRecipes(recipesData) {
           return `
             <div>
                 <p>${ingredient.ingredient}</p>
-                <p class="text-grey">${ingredient.quantity}${
+                <p class="text-grey">${ingredient.quantity ? ingredient.quantity : ""}${
             ingredient.unit ? ingredient.unit : ""
           }</p>
             </div>
