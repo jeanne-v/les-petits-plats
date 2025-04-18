@@ -1,5 +1,11 @@
-import { recipes } from "./recipes.js";
+import { recipes as allRecipes } from "./recipes.js";
 const recipesContainer = document.getElementById("recipes-container");
+const mainSearchInput = document.getElementById("main-search-input");
+
+let matchKeywordRecipes = [];
+
+matchKeywordRecipes = allRecipes;
+displayRecipes(matchKeywordRecipes);
 
 function displayRecipes(recipesData) {
   recipesContainer.innerHTML = recipesData
@@ -45,11 +51,45 @@ function displayRecipes(recipesData) {
     .join("");
 }
 
-displayRecipes(recipes);
+function returnFilteredRecipesByKeyword(keyword) {
+  const lowerCaseKeyWord = keyword.toLowerCase();
+  return allRecipes.filter((recipe) => {
+    if (recipe.name.toLowerCase().includes(lowerCaseKeyWord)) {
+      return true;
+    }
+    if (recipe.description.toLowerCase().includes(lowerCaseKeyWord)) {
+      return true;
+    }
+    return recipe.ingredients.some((ingredient) => {
+      return ingredient.ingredient.toLowerCase().includes(lowerCaseKeyWord);
+    });
+  });
+}
+
+function displayNoRecipesFoundMsg(keyword) {
+  recipesContainer.innerHTML = `
+  <div class="col-span-full text-center">
+    <p>Aucune recette ne contient ‘${keyword}’. Vous pouvez chercher « tarte aux pommes», «poisson», etc</p>
+  </div>`;
+}
 
 const filterBtns = Array.from(document.getElementsByClassName("dropdown-btn"));
 filterBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     btn.parentElement.classList.toggle("open");
   });
+});
+
+mainSearchInput.addEventListener("input", () => {
+  if (mainSearchInput.value === "") {
+    matchKeywordRecipes = allRecipes;
+    displayRecipes(matchKeywordRecipes);
+  } else if (mainSearchInput.value.trim().length >= 3) {
+    matchKeywordRecipes = returnFilteredRecipesByKeyword(mainSearchInput.value.trim());
+    if (matchKeywordRecipes.length > 0) {
+      displayRecipes(matchKeywordRecipes);
+    } else {
+      displayNoRecipesFoundMsg(mainSearchInput.value.trim());
+    }
+  }
 });
