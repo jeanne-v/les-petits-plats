@@ -46,3 +46,10 @@ function displayRecipes(recipesData) {
 }
 
 displayRecipes(recipes);
+
+const filterBtns = Array.from(document.getElementsByClassName("dropdown-btn"));
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    btn.parentElement.classList.toggle("open");
+  });
+});

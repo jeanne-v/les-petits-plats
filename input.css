@@ -13,13 +13,64 @@
 }
 
 @layer components {
+  .filter-dropdown {
+    position: relative;
+  }
+
   .dropdown-btn {
-    background-color: var(--color-white);
     padding: calc(4 * var(--spacing));
     display: flex;
     align-items: center;
     gap: 63px;
-    border-radius: 12px;
     cursor: pointer;
+    border-radius: 12px;
+    background-color: var(--color-white);
+  }
+
+  .dropdown-content {
+    position: absolute;
+    background-color: var(--color-white);
+    z-index: 1;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    display: none;
+    overflow: hidden;
+  }
+
+  .dropdown-input {
+    margin: 0 16px;
+    border: 1px solid #c6c6c6;
+    width: 100%;
+    max-width: calc(100% - 32px);
+    height: 36px;
+    padding: 0 28px 0 8px;
+    font-size: var(--text-sm);
+    color: var(--color-grey);
+    background-image: url(assets/loupe-grey.svg);
+    background-position: center right 12px;
+    background-repeat: no-repeat;
+    background-size: var(--text-sm);
+  }
+
+  .dropdown-list {
+    margin-top: 16px;
+    max-height: 210px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-dropdown.open .dropdown-btn {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .filter-dropdown.open .dropdown-btn img {
+    transform: rotate(180deg);
+  }
+
+  .filter-dropdown.open .dropdown-content {
+    display: block;
   }
 }
