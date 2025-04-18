@@ -1,5 +1,11 @@
-import { recipes } from "./recipes.js";
+import { recipes as allRecipes } from "./recipes.js";
 const recipesContainer = document.getElementById("recipes-container");
+const mainSearchInput = document.getElementById("main-search-input");
+
+let matchKeywordRecipes = [];
+
+matchKeywordRecipes = allRecipes;
+displayRecipes(matchKeywordRecipes);
 
 function displayRecipes(recipesData) {
   recipesContainer.innerHTML = recipesData
@@ -45,11 +51,54 @@ function displayRecipes(recipesData) {
     .join("");
 }
 
-displayRecipes(recipes);
+function returnFilteredRecipesByKeyword(keyword) {
+  const lowerCaseKeyWord = keyword.toLowerCase();
+  const filteredRecipes = [];
+  for (let i = 0; i < allRecipes.length; i++) {
+    if (allRecipes[i].name.toLowerCase().includes(lowerCaseKeyWord)) {
+      filteredRecipes.push(allRecipes[i]);
+      continue;
+    }
+    if (allRecipes[i].description.toLowerCase().includes(lowerCaseKeyWord)) {
+      filteredRecipes.push(allRecipes[i]);
+      continue;
+    }
+    for (let j = 0; j < allRecipes[i].ingredients.length; j++) {
+      if (
+        allRecipes[i].ingredients[j].ingredient.toLowerCase().includes(lowerCaseKeyWord)
+      ) {
+        filteredRecipes.push(allRecipes[i]);
+        break;
+      }
+    }
+  }
+  return filteredRecipes;
+}
+
+function displayNoRecipesFoundMsg(keyword) {
+  recipesContainer.innerHTML = `
+  <div class="col-span-full text-center">
+    <p>Aucune recette ne contient ‘${keyword}’. Vous pouvez chercher « tarte aux pommes», «poisson», etc</p>
+  </div>`;
+}
 
 const filterBtns = Array.from(document.getElementsByClassName("dropdown-btn"));
 filterBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     btn.parentElement.classList.toggle("open");
   });
+});
+
+mainSearchInput.addEventListener("input", () => {
+  if (mainSearchInput.value === "") {
+    matchKeywordRecipes = allRecipes;
+    displayRecipes(matchKeywordRecipes);
+  } else if (mainSearchInput.value.trim().length >= 3) {
+    matchKeywordRecipes = returnFilteredRecipesByKeyword(mainSearchInput.value.trim());
+    if (matchKeywordRecipes.length > 0) {
+      displayRecipes(matchKeywordRecipes);
+    } else {
+      displayNoRecipesFoundMsg(mainSearchInput.value.trim());
+    }
+  }
 });
