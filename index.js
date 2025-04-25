@@ -67,6 +67,9 @@ function renderRecipes(recipesData) {
         </article>`;
     })
     .join("");
+
+  document.getElementById("found-recipes-nb").textContent =
+    recipesData.length + " " + (recipesData.length > 1 ? "recettes" : "recette");
 }
 
 function getMatchKeywordRecipes(keyword) {
