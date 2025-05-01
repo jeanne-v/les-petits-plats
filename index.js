@@ -23,28 +23,27 @@ let activeFilters = {
 matchKeywordRecipes = allRecipes;
 matchKeywordAndFiltersRecipes = matchKeywordRecipes;
 renderRecipes(matchKeywordAndFiltersRecipes);
-initAllFilters();
+initAllFilterLists();
 
 function renderRecipes(recipesData) {
-  recipesContainer.innerHTML = recipesData
-    .map((recipe) => {
-      const ingredientsHtml = recipe.ingredients
-        .map((ingredient) => {
-          return `
+  let html = "";
+  recipesData.forEach((recipe) => {
+    let ingredientsHtml = "";
+    recipe.ingredients.forEach((ingredient) => {
+      ingredientsHtml += `
             <div>
                 <p>${ingredient.ingredient}</p>
                 <p class="text-grey">${ingredient.quantity ? ingredient.quantity : ""}${
-            ingredient.unit ? ingredient.unit : ""
-          }</p>
+        ingredient.unit ? ingredient.unit : ""
+      }</p>
             </div>
             `;
-        })
-        .join("");
+    });
 
-      return `
+    html += `
         <article class="bg-white rounded-3xl overflow-hidden shadow-[0px_4px_34px_30px_rgba(0,_0,_0,_0.04)]">
             <div class="relative">
-                <img class="aspect-[380/253] object-cover" src="assets/${recipe.image}" alt=""/>
+                <img class="aspect-[380/253] object-cover w-full" src="assets/${recipe.image}" alt=""/>
                 <p class="text-xs bg-yellow py-1 px-4 w-fit absolute top-5 right-5 rounded-2xl">
                     ${recipe.time}min
                 </p>
@@ -65,8 +64,9 @@ function renderRecipes(recipesData) {
                 </div>
             </div>
         </article>`;
-    })
-    .join("");
+  });
+
+  recipesContainer.innerHTML = html;
 
   document.getElementById("found-recipes-nb").textContent =
     recipesData.length + " " + (recipesData.length > 1 ? "recettes" : "recette");
@@ -135,19 +135,21 @@ function renderNoRecipesFoundMsg(keyword) {
   <div class="col-span-full text-center">
     <p>Aucune recette ne contient ‘${keyword}’. Vous pouvez chercher « tarte aux pommes», «poisson», etc</p>
   </div>`;
+
+  document.getElementById("found-recipes-nb").textContent = "0 recette";
 }
 
 function renderFilterList(filterListEl, contentArr) {
-  filterListEl.innerHTML = contentArr
-    .map((currentItem) => {
-      return `
+  let html = "";
+  contentArr.forEach((currentItem) => {
+    html += `
       <li>
         <button data-value="${currentItem}" class="filter-btn text-sm cursor-pointer block leading-none px-4 py-2 hover:bg-yellow w-full text-left first-letter:capitalize">
           ${currentItem}
         </button>
       </li>`;
-    })
-    .join("");
+  });
+  filterListEl.innerHTML = html;
 }
 
 function renderActiveFilterTags() {
@@ -212,7 +214,7 @@ function getMatchKeywordArray(arr, keyword) {
   });
 }
 
-function initAllFilters() {
+function initAllFilterLists() {
   recipesIngredients = getRecipesIngredientsArray(matchKeywordAndFiltersRecipes);
   renderFilterList(ingredientsListEl, recipesIngredients);
   recipesAppliances = getRecipesAppliancesArray(matchKeywordAndFiltersRecipes);
@@ -225,7 +227,15 @@ function handleFilterTagsUpdate() {
   renderActiveFilterTags();
   matchKeywordAndFiltersRecipes = getFilteredRecipes(matchKeywordRecipes);
   renderRecipes(matchKeywordAndFiltersRecipes);
-  initAllFilters();
+  initAllFilterLists();
+}
+
+function resetFilters() {
+  activeFilterTagsContainer.innerHTML = "";
+  activeFilters.ingredients = [];
+  activeFilters.appliances = [];
+  activeFilters.ustensils = [];
+  initAllFilterLists();
 }
 
 const filterBtns = Array.from(document.getElementsByClassName("dropdown-btn"));
@@ -240,18 +250,16 @@ mainSearchInput.addEventListener("input", () => {
     matchKeywordRecipes = allRecipes;
     matchKeywordAndFiltersRecipes = matchKeywordRecipes;
     renderRecipes(matchKeywordAndFiltersRecipes);
-    initAllFilters();
-    activeFilterTagsContainer.innerHTML = "";
+    resetFilters();
   } else if (mainSearchInput.value.trim().length >= 3) {
     matchKeywordRecipes = getMatchKeywordRecipes(mainSearchInput.value.trim());
     matchKeywordAndFiltersRecipes = matchKeywordRecipes;
     if (matchKeywordAndFiltersRecipes.length > 0) {
       renderRecipes(matchKeywordAndFiltersRecipes);
-      initAllFilters();
-      activeFilterTagsContainer.innerHTML = "";
     } else {
       renderNoRecipesFoundMsg(mainSearchInput.value.trim());
     }
+    resetFilters();
   }
 });
 
