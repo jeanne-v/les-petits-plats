@@ -7,9 +7,12 @@ const ustensilsListEl = document.getElementById("ustensils-list");
 
 const activeFilterTagsContainer = document.getElementById("active-filter-tags-container");
 
+mainSearchInput.value = "";
+
 let matchKeywordRecipes = [];
 let matchKeywordAndFiltersRecipes = [];
 
+// ingredients, applicances and ustensils of currently shown recipes (exempt those already show as tags)
 let recipesIngredients = [];
 let recipesAppliances = [];
 let recipesUstensils = [];
@@ -300,38 +303,23 @@ document.addEventListener("click", (e) => {
 const filterInputs = Array.from(document.getElementsByClassName("dropdown-input"));
 filterInputs.forEach((input) => {
   input.addEventListener("input", () => {
-    if (input.name === "ingredients-filter" && input.value !== "") {
-      const filteredIngredientsArray = getMatchKeywordArray(
-        recipesIngredients,
-        input.value
-      );
-      renderFilterList(ingredientsListEl, filteredIngredientsArray);
-      return;
+    let htmlEl;
+    let unfilteredArr = [];
+    if (input.name === "ingredients-filter") {
+      htmlEl = ingredientsListEl;
+      unfilteredArr = recipesIngredients;
+    } else if (input.name === "appliances-filter") {
+      htmlEl = appliancesListEl;
+      unfilteredArr = recipesAppliances;
+    } else if (input.name === "ustensils-filter") {
+      htmlEl = ustensilsListEl;
+      unfilteredArr = recipesUstensils;
     }
-    if (input.name === "ingredients-filter" && input.value === "") {
-      renderFilterList(ingredientsListEl, recipesIngredients);
-      return;
+    // renders filtered array if input not empty otherwise renders unfiltered array
+    let arr = unfilteredArr;
+    if (input.value !== "") {
+      arr = getMatchKeywordArray(unfilteredArr, input.value);
     }
-    if (input.name === "appliances-filter" && input.value !== "") {
-      const filteredAppliancesArray = getMatchKeywordArray(
-        recipesAppliances,
-        input.value
-      );
-      renderFilterList(appliancesListEl, filteredAppliancesArray);
-      return;
-    }
-    if (input.name === "appliances-filter" && input.value === "") {
-      renderFilterList(appliancesListEl, recipesAppliances);
-      return;
-    }
-    if (input.name === "ustensils-filter" && input.value !== "") {
-      const filteredUstensilsArray = getMatchKeywordArray(recipesUstensils, input.value);
-      renderFilterList(ustensilsListEl, filteredUstensilsArray);
-      return;
-    }
-    if (input.name === "ustensils-filter" && input.value === "") {
-      renderFilterList(ustensilsListEl, recipesUstensils);
-      return;
-    }
+    renderFilterList(htmlEl, arr);
   });
 });
