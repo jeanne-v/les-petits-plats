@@ -26,12 +26,13 @@
           <span class="block">DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</span>
         </h1>
 
-        <form class="mt-7 relative">
+        <div class="mt-7 relative">
           <input
             placeholder="Rechercher une recette, un ingrédient, ..."
             class="bg-white w-full h-18 rounded-xl pl-8 pr-22 text-grey placeholder-grey"
             type="search"
             name="search"
+            id="main-search-input"
           />
 
           <button
@@ -43,13 +44,13 @@
               alt="rechercher"
             />
           </button>
-        </form>
+        </div>
       </div>
     </div>
 
     <div class="bg-light-grey px-12">
       <div class="max-w-[1236px] mx-auto pt-5 pb-50">
-        <div class="flex items-baseline justify-between">
+        <div class="flex items-baseline justify-between mb-3">
           <div class="flex gap-16 items-start">
             <div class="filter-dropdown" id="ingredients-filter">
               <button class="dropdown-btn">
@@ -57,8 +58,17 @@
                 <img src="assets/chevron.svg" alt="" />
               </button>
               <div class="dropdown-content">
-                <input type="search" class="dropdown-input" name="ingredients-filter" />
-                <ul class="dropdown-list" id="ingredients-list">
+                <input
+                  type="search"
+                  class="dropdown-input"
+                  name="ingredients-filter"
+                  autocomplete="off"
+                />
+                <ul
+                  class="dropdown-list"
+                  id="ingredients-list"
+                  data-content="ingredients"
+                >
                   <li>
                     <button
                       class="text-sm cursor-pointer block leading-none px-4 py-2 hover:bg-yellow w-full text-left"
@@ -125,8 +135,13 @@
                 <img src="assets/chevron.svg" alt="" />
               </button>
               <div class="dropdown-content">
-                <input type="search" class="dropdown-input" name="appliances-filter" />
-                <ul class="dropdown-list" id="appliances-list">
+                <input
+                  type="search"
+                  class="dropdown-input"
+                  name="appliances-filter"
+                  autocomplete="off"
+                />
+                <ul class="dropdown-list" id="appliances-list" data-content="appliances">
                   <li class="px-4 py-2 hover:bg-yellow">
                     <button class="text-sm cursor-pointer block leading-none">
                       Test
@@ -152,8 +167,13 @@
                 <img src="assets/chevron.svg" alt="" />
               </button>
               <div class="dropdown-content">
-                <input type="search" class="dropdown-input" name="ustensils-filter" />
-                <ul class="dropdown-list" id="ustensils-list">
+                <input
+                  type="search"
+                  class="dropdown-input"
+                  name="ustensils-filter"
+                  autocomplete="off"
+                />
+                <ul class="dropdown-list" id="ustensils-list" data-content="ustensils">
                   <li class="px-4 py-2 hover:bg-yellow">
                     <button class="text-sm cursor-pointer block leading-none">
                       Test
@@ -188,11 +208,13 @@
               </div>
             </div>
           </div>
-          <p class="font-anton text-xl">1500 recettes</p>
+          <p class="font-anton text-xl" id="found-recipes-nb"></p>
         </div>
 
+        <div id="active-filter-tags-container" class="mt-5 flex gap-3"></div>
+
         <div
-          class="grid grid-cols-3 gap-x-12 gap-y-16 mt-13"
+          class="grid grid-cols-3 gap-x-12 gap-y-16 mt-11"
           id="recipes-container"
         ></div>
       </div>
